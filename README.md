@@ -1,7 +1,6 @@
 # OpenGround
 
-[![Build Status](https://travis-ci.org/spcfa/OpenGround_a7105.svg?branch=master)]
-(https://travis-ci.org/spcfa/OpenGround_a7105)
+[![Build Status](https://travis-ci.org/spcfa/OpenGround_a7105.svg?branch=master)](https://travis-ci.org/spcfa/OpenGround_a7105)
 
 a FlySky AFHDS/AFHDS2A/Hubsan compatible opensource firmware for the flysky fs-i6s and the turnigy evolution.
 
