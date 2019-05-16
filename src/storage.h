@@ -46,6 +46,8 @@ typedef struct {
     uint16_t timer;
     // scale
     uint8_t stick_scale;
+    // Radio protocol
+    uint8_t rf_protocol;
     // add further data here...
 } MODEL_DESC;
 

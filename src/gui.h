@@ -74,6 +74,7 @@ typedef struct {
 #define GUI_SUBPAGE_SETTING_MODEL_NAME  0
 #define GUI_SUBPAGE_SETTING_MODEL_SCALE 1
 #define GUI_SUBPAGE_SETTING_MODEL_TIMER 2
+#define GUI_SUBPAGE_SETTING_MODEL_PROTO 3
 
 void gui_init(void);
 void gui_loop(void);

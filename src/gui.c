@@ -71,6 +71,7 @@ static void gui_cb_model_next(void);
 static void gui_cb_setting_model_stickscale(void);
 static void gui_cb_setting_model_name(void);
 static void gui_cb_setting_model_timer(void);
+static void gui_cb_setting_model_proto(void);
 static void gui_cb_setting_option_leave(void);
 static void gui_cb_previous_page(void);
 static void gui_cb_next_page(void);
@@ -246,6 +247,11 @@ static void gui_cb_setting_model_name(void) {
 static void gui_cb_setting_model_timer(void) {
     gui_page    |= GUI_PAGE_CONFIG_OPTION_FLAG;
     gui_sub_page = GUI_SUBPAGE_SETTING_MODEL_TIMER;
+}
+
+static void gui_cb_setting_model_proto(void) {
+    gui_page    |= GUI_PAGE_CONFIG_OPTION_FLAG;
+    gui_sub_page = GUI_SUBPAGE_SETTING_MODEL_PROTO;
 }
 
 static void gui_cb_setting_option_leave(void) {
