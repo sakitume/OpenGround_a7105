@@ -34,6 +34,7 @@
 #include "delay.h"
 #include "touch.h"
 #include "screen.h"
+#include "proto.h"
 #include "assert.h"
 
 static uint32_t gui_config_counter;
@@ -279,6 +280,18 @@ static void gui_cb_model_timer_dec(void) {
 static void gui_cb_model_timer_inc(void) {
     if (storage.model[storage.current_model].timer < 99*60) {
         storage.model[storage.current_model].timer++;
+    }
+}
+
+static void gui_cb_model_proto_dec(void) {
+    if (storage.model[storage.current_model].rf_protocol > PROTO_AFHDS) {
+        storage.model[storage.current_model].rf_protocol--;
+    }
+}
+
+static void gui_cb_model_proto_inc(void) {
+    if (storage.model[storage.current_model].rf_protocol < PROTO_SIZE) {
+        storage.model[storage.current_model].rf_protocol++;
     }
 }
 
@@ -1034,6 +1047,9 @@ static void gui_config_model_render_main(void) {
 
     // time
     gui_add_button_smallfont(3, y, 40, 13, "TIMER", &gui_cb_setting_model_timer);
+    y += 13 + 1;
+    // RF protocol
+    gui_add_button_smallfont(3, y, 40, 13, "RF PROTOCOL", &gui_cb_setting_model_proto);
 
     // render buttons and set callback
     gui_add_button_smallfont(89, 34 + 0*15, 35, 13, "SAVE", &gui_cb_config_save);
@@ -1101,6 +1117,18 @@ static void gui_cb_render_option_timer(uint32_t UNUSED(x), uint32_t y) {
                      y, 1, storage.model[storage.current_model].timer);
 }
 
+static void gui_cb_render_option_proto(uint32_t UNUSED(x), uint32_t y) {
+    screen_set_font(font_system5x7, 0, 0);
+
+    // render +/- button
+    gui_add_button(15, y, 15, 15, "-", &gui_cb_model_proto_dec);
+    gui_add_button(LCD_WIDTH - 15 - 15, y, 15, 15, "+", &gui_cb_model_proto_inc);
+
+    // render protocol name
+    screen_puts_xy(LCD_WIDTH / 2 - screen_strlen("HUBSAN") / 2,
+                     y, 1, rf_get_proto_name(storage.model[storage.current_model].rf_protocol));
+}
+
 
 static void gui_config_model_render(void) {
     // header
@@ -1128,6 +1156,9 @@ static void gui_config_model_render(void) {
 
             case (GUI_SUBPAGE_SETTING_MODEL_TIMER) :
                 gui_render_option_window("TIMER", &gui_cb_render_option_timer);
+                break;
+            case (GUI_SUBPAGE_SETTING_MODEL_PROTO) :
+                gui_render_option_window("RF PROTOCOL", &gui_cb_render_option_proto);
                 break;
         }
     }
