@@ -99,8 +99,8 @@ void frsky_init(void) {
 
     // check if spi is working properly
     if (!a7105_check_transceiver()) {
-        // no cc2500 detected - abort
-        debug("frsky: no cc2500 detected. abort\n");
+        // no a7105 detected - abort
+        debug("frsky: no a7105 detected. abort\n");
         debug_flush();
         return;
     }
@@ -175,6 +175,15 @@ void frsky_tx_set_enabled(uint32_t enabled) {
 
 static void frsky_send_packet(void) {
     // send packet
+
+    // fetch adc channel data
+    adc_process();
+    uint16_t adc_data[8];
+    uint32_t i;
+    for (i = 0; i < 8; i++) {
+        adc_data[i] = adc_get_channel_packetdata(i);
+    }
+
 }
 
 static uint8_t frsky_packet_lost_counter;

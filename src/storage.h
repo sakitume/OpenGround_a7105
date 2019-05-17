@@ -24,9 +24,9 @@
 
 #include "frsky.h"
 
-#define STORAGE_VERSION_ID 0x03
+#define STORAGE_VERSION_ID 0x04
 #define STORAGE_MODEL_NAME_LEN 11
-#define STORAGE_MODEL_MAX_COUNT 10
+#define STORAGE_MODEL_MAX_COUNT 9
 
 void storage_init(void);
 // static void storage_init_memory(void);

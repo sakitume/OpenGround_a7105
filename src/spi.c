@@ -45,10 +45,10 @@ void spi_init(void) {
     /*while(1) {
         delay_ms(10);
         // select device:
-        CS_LO();
+        spi_csn_lo();
         spi_tx(0xAB);
         // select device:
-        CS_HI();
+        spi_csn_hi();
 
     }*/
 }
@@ -187,7 +187,7 @@ void spi_dma_xfer(uint8_t *buffer, uint8_t len) {
 
 static void spi_init_gpio(void) {
     // init sck, mosi
-    uint32_t spi_gpios = A7105_SPI_SCK_PIN | A7105_SPI_MOSI_PIN;
+    uint32_t spi_gpios = A7105_SPI_SCK_PIN | A7105_SPI_MOSI_PIN | A7105_SPI_MISO_PIN;
     // set mode
     gpio_mode_setup(A7105_SPI_GPIO, GPIO_MODE_AF, GPIO_PUPD_NONE, spi_gpios);
     gpio_set_output_options(A7105_SPI_GPIO, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, spi_gpios);

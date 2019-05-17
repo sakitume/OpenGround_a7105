@@ -120,6 +120,8 @@ void config_detect_hw_revision(void);
 #define A7105_SPI_GPIO             GPIOE
 // LABELED SDIO
 #define A7105_SPI_MOSI_PIN         GPIO15
+// LABELED GIO1
+#define A7105_SPI_MISO_PIN         GPIO14
 // LABELED SCK
 #define A7105_SPI_SCK_PIN          GPIO13
 // LABELED SCS
@@ -137,7 +139,7 @@ void config_detect_hw_revision(void);
 #define A7105_RF1_GPIO           GPIOE
 
 // LABELED RF0
-#define A7105_RF0_PIN            GPIO11
+#define A7105_RF0_PIN            GPIO10
 #define A7105_RF0_GPIO           GPIOE
 
 // LABELED RX-W
@@ -147,10 +149,6 @@ void config_detect_hw_revision(void);
 // LABELED TX_W
 #define A7105_PA_GPIO     GPIOE
 #define A7105_PA_PIN      GPIO9
-
-// LABELED GIO1
-#define A7105_GDO1_GPIO        GPIOE
-#define A7105_GDO1_PIN         GPIO14
 
 // LABELED GIO2
 #define A7105_GDO2_GPIO           GPIOB

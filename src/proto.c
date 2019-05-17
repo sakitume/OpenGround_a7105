@@ -19,12 +19,13 @@
 
 #include "proto.h"
 #include "a7105.h"
+#include "frsky.h"
 #include "debug.h"
 
 void proto_init(void) {
     debug("proto: init\n"); debug_flush();
 
-    a7105_init();
+    frsky_init();
 }
 
 char *rf_get_proto_name(uint8_t i) {

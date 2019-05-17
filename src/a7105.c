@@ -37,14 +37,6 @@ void a7105_init(void) {
     a7105_init_gpio();
     spi_init();
 
-    // check if spi is working properly
-    if (!a7105_check_transceiver()) {
-        // no a7105 detected - abort
-        debug("a7105: no a7105 detected. abort\n");
-        debug_flush();
-        return;
-    }
-
     debug("a7105: init done\n"); debug_flush();
 }
 
@@ -87,41 +79,31 @@ void a7105_init_gpio(void) {
 */
 }
 
-static void CS_HI(void) {
-    delay_us(1);
-    gpio_set(A7105_SPI_GPIO, A7105_SPI_CSN_PIN);
-}
-
-static void CS_LO(void) {
-    gpio_clear(A7105_SPI_GPIO, A7105_SPI_CSN_PIN);
-    delay_us(1);
-}
-
 void a7105_write_reg(uint8_t address, uint8_t data) {
-    CS_LO();
+    spi_csn_lo();
     spi_tx(address);
     spi_tx(data);
-    CS_HI();
+    spi_csn_hi();
 }
 
 uint8_t a7105_read_reg(uint8_t address) {
     uint8_t data;
-    CS_LO();
+    spi_csn_lo();
     spi_tx(0x40 | address);
     /* Wait for tx completion before spi shutdown */
     data = spi_rx();
-    CS_HI();
+    spi_csn_hi();
     return data;
 }
 
 void a7105_write_data(uint8_t *dpbuffer, uint8_t len, uint8_t channel) {
     int i;
-    CS_LO();
+    spi_csn_lo();
     spi_tx(A7105_RST_WRPTR);
     spi_tx(A7105_05_FIFO_DATA);
     for (i = 0; i < len; i++)
         spi_tx(dpbuffer[i]);
-    CS_HI();
+    spi_csn_hi();
 
     a7105_write_reg(A7105_0F_PLL_I, channel);
     a7105_strobe(A7105_TX);
@@ -174,13 +156,13 @@ int a7105_reset() {
 }
 
 void a7105_write_id(uint32_t id) {
-    CS_LO();
+    spi_csn_lo();
     spi_tx(A7105_06_ID_DATA);
     spi_tx((id >> 24) & 0xFF);
     spi_tx((id >> 16) & 0xFF);
     spi_tx((id >> 8) & 0xFF);
     spi_tx((id >> 0) & 0xFF);
-    CS_HI();
+    spi_csn_hi();
 }
 
 void a7105_set_power(int power) {
@@ -211,9 +193,9 @@ void a7105_set_power(int power) {
 }
 
 void a7105_strobe(enum A7105_State state) {
-    CS_LO();
+    spi_csn_lo();
     spi_tx(state);
-    CS_HI();
+    spi_csn_hi();
 }
 
 uint8_t a7105_check_transceiver(void) {
