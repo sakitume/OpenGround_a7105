@@ -25,7 +25,6 @@
 #include "console.h"
 #include "screen.h"
 #include "config.h"
-#include "cc2500.h"
 
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>

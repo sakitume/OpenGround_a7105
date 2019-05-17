@@ -108,7 +108,7 @@ void config_detect_hw_revision(void);
 #define ADC_DMA_TC_FLAG           DMA_ISR_TCIF1
 #define ADC_CHANNEL_COUNT 11
 
-// cc2500 module connection
+// a7105 module connection
 // SI = SDIO
 // SCK = SCK
 // MISO = GD1
@@ -117,38 +117,44 @@ void config_detect_hw_revision(void);
 // CSN = SCS
 // PA_EN = TX = TXW
 // LNA_EN = RX = RXW
-#define CC2500_SPI_GPIO             GPIOE
+#define A7105_SPI_GPIO             GPIOE
+// LABELED SDIO
+#define A7105_SPI_MOSI_PIN         GPIO15
 // LABELED SCK
-#define CC2500_SPI_SCK_PIN          GPIO13
-// LABELED SPIO
-#define CC2500_SPI_MOSI_PIN         GPIO15
-// LABELED GIO1
-#define CC2500_SPI_MISO_PIN         GPIO14
-// LABELED RF2
-#define CC2500_SPI_CSN_PIN          GPIO12
-#define CC2500_SPI                  SPI1
-#define CC2500_SPI                  SPI1
-#define CC2500_SPI_DR               SPI1_DR
-#define CC2500_SPI_CLK              RCC_SPI1
-#define CC2500_SPI_DMA_CLOCK        RCC_DMA1
-#define CC2500_SPI_TX_DMA_CHANNEL   DMA_CHANNEL3
-#define CC2500_SPI_RX_DMA_CHANNEL   DMA_CHANNEL2
+#define A7105_SPI_SCK_PIN          GPIO13
+// LABELED SCS
+#define A7105_SPI_CSN_PIN          GPIO12
+#define A7105_SPI                  SPI1
+#define A7105_SPI                  SPI1
+#define A7105_SPI_DR               SPI1_DR
+#define A7105_SPI_CLK              RCC_SPI1
+#define A7105_SPI_DMA_CLOCK        RCC_DMA1
+#define A7105_SPI_TX_DMA_CHANNEL   DMA_CHANNEL3
+#define A7105_SPI_RX_DMA_CHANNEL   DMA_CHANNEL2
 
 // LABELED RF1
-#define CC2500_GDO1_PIN            GPIO11
-#define CC2500_GDO1_GPIO           GPIOE
+#define A7105_RF1_PIN            GPIO11
+#define A7105_RF1_GPIO           GPIOE
+
+// LABELED RF0
+#define A7105_RF0_PIN            GPIO11
+#define A7105_RF0_GPIO           GPIOE
 
 // LABELED RX-W
-#define CC2500_LNA_GPIO     GPIOE
-#define CC2500_LNA_PIN      GPIO9
+#define A7105_LNA_GPIO     GPIOE
+#define A7105_LNA_PIN      GPIO8
 
 // LABELED TX_W
-#define CC2500_PA_GPIO     GPIOE
-#define CC2500_PA_PIN      GPIO8
+#define A7105_PA_GPIO     GPIOE
+#define A7105_PA_PIN      GPIO9
+
+// LABELED GIO1
+#define A7105_GDO1_GPIO        GPIOE
+#define A7105_GDO1_PIN         GPIO14
 
 // LABELED GIO2
-#define CC2500_GDO2_GPIO           GPIOB
-#define CC2500_GDO2_PIN            GPIO2
+#define A7105_GDO2_GPIO           GPIOB
+#define A7105_GDO2_PIN            GPIO2
 
 // BUTTONS
 #define BUTTON_POWER_BOTH_GPIO        GPIOB

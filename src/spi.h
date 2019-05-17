@@ -27,8 +27,8 @@
 
 void spi_init(void);
 void spi_dma_xfer(uint8_t *buffer, uint8_t len);
-#define spi_csn_lo() { gpio_clear(CC2500_SPI_GPIO, CC2500_SPI_CSN_PIN); delay_us(1); }
-#define spi_csn_hi() { delay_us(1); gpio_set(CC2500_SPI_GPIO, CC2500_SPI_CSN_PIN); }
+#define spi_csn_lo() { gpio_clear(A7105_SPI_GPIO, A7105_SPI_CSN_PIN); delay_us(1); }
+#define spi_csn_hi() { delay_us(1); gpio_set(A7105_SPI_GPIO, A7105_SPI_CSN_PIN); }
 uint8_t spi_tx(uint8_t data);
 uint8_t spi_rx(void);
 uint8_t spi_read_address(uint8_t address);

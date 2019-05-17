@@ -28,7 +28,7 @@ void proto_init(void);
 // Supported protocols
 typedef enum {
   PROTO_AFHDS = 0,
-  PROTO_AFHDS2,
+  PROTO_AFHDS2A,
   PROTO_HUBSAN,
   PROTO_SIZE
 } protocol_id_t;

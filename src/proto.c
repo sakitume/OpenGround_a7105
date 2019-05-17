@@ -18,18 +18,20 @@
 */
 
 #include "proto.h"
+#include "a7105.h"
 #include "debug.h"
 
 void proto_init(void) {
     debug("proto: init\n"); debug_flush();
 
+    a7105_init();
 }
 
 char *rf_get_proto_name(uint8_t i) {
     switch (i) {
         default                     : return "???";
         case (PROTO_AFHDS)          : return "AFHDS";
-        case (PROTO_AFHDS2)         : return "AFHDS2";
+        case (PROTO_AFHDS2A)        : return "AFHDS2A";
         case (PROTO_HUBSAN)         : return "HUBSAN";
     }
 }

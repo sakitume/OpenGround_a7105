@@ -26,6 +26,7 @@
 #include "eeprom.h"
 #include "hoptable.h"
 #include "crc16.h"
+#include "proto.h"
 
 // internal functions
 static uint8_t  storage_is_valid(void);
@@ -162,12 +163,14 @@ static void storage_load_defaults(void) {
         storage.model[i].name[6] = 0;
         storage.model[i].timer = 3*60;
         storage.model[i].stick_scale = 100;
+        storage.model[i].rf_protocol = PROTO_AFHDS;
     }
 
     // add example model
     storage_mode_set_name(0, "TinyWhoop");
     storage.model[0].timer = 3*60;
-    storage.model[i].stick_scale = 50;
+    storage.model[0].stick_scale = 50;
+    storage.model[0].rf_protocol = PROTO_AFHDS2A;
     storage.current_model = 0;
 }
 

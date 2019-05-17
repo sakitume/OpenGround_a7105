@@ -23,7 +23,7 @@
 #include <stdint.h>
 
 #include "main.h"
-#include "cc2500.h"
+#include "a7105.h"
 
 #define FRSKY_HOPTABLE_SIZE 47
 #define FRSKY_PACKET_LENGTH 17

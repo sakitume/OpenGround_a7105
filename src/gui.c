@@ -988,7 +988,6 @@ static void gui_setup_clonetx_render(void) {
             // DONE. REBOOT NECESSARY
             break;
     }
-    
 }
 
 static void gui_setup_bindmode_render(void) {
@@ -1125,7 +1124,7 @@ static void gui_cb_render_option_proto(uint32_t UNUSED(x), uint32_t y) {
     gui_add_button(LCD_WIDTH - 15 - 15, y, 15, 15, "+", &gui_cb_model_proto_inc);
 
     // render protocol name
-    screen_puts_xy(LCD_WIDTH / 2 - screen_strlen("HUBSAN") / 2,
+    screen_puts_xy(LCD_WIDTH / 2 - screen_strlen("AFHDS2A") / 2,
                      y, 1, rf_get_proto_name(storage.model[storage.current_model].rf_protocol));
 }
 

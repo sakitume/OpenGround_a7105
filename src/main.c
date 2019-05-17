@@ -32,8 +32,8 @@
 #include "adc.h"
 #include "sound.h"
 #include "touch.h"
-#include "cc2500.h"
-#include "frsky.h"
+#include "a7105.h"
+#include "proto.h"
 #include "storage.h"
 #include "wdt.h"
 #include "gui.h"
@@ -183,7 +183,7 @@ int main(void) {
     eeprom_init();
     storage_init();
 
-    frsky_init();
+    proto_init();
 
     usb_init();
 
