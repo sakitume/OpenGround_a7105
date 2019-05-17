@@ -17,8 +17,8 @@
     author: fishpepper <AT> gmail.com
 */
 
-#ifndef FRSKY_H_
-#define FRSKY_H_
+#ifndef FLYSKY_H_
+#define FLYSKY_H_
 
 #include <stdint.h>
 
@@ -30,8 +30,7 @@
 #define FRSKY_PACKET_BUFFER_SIZE (FRSKY_PACKET_LENGTH+3)
 #define FRSKY_COUNT_RXSTATS 20
 
-void frsky_init(void);
-uint8_t frsky_check_transceiver(void);
+void flysky_init(void);
 void frsky_configure(void);
 uint8_t frsky_bind_jumper_set(void);
 void frsky_enter_bindmode(void);
@@ -122,4 +121,4 @@ void frsky_store_config(void);
 #define FRSKY_HUB_TELEMETRY_CURRENT        0x28
 */
 
-#endif  // FRSKY_H_
+#endif  // FLYSKY_H_

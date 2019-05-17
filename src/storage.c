@@ -22,7 +22,7 @@
 #include "wdt.h"
 #include "delay.h"
 #include "led.h"
-#include "frsky.h"
+#include "flysky.h"
 #include "eeprom.h"
 #include "hoptable.h"
 #include "crc16.h"

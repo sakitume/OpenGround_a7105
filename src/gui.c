@@ -290,7 +290,7 @@ static void gui_cb_model_proto_dec(void) {
 }
 
 static void gui_cb_model_proto_inc(void) {
-    if (storage.model[storage.current_model].rf_protocol < PROTO_SIZE) {
+    if (storage.model[storage.current_model].rf_protocol < PROTO_SIZE - 1) {
         storage.model[storage.current_model].rf_protocol++;
     }
 }
@@ -1048,7 +1048,7 @@ static void gui_config_model_render_main(void) {
     gui_add_button_smallfont(3, y, 40, 13, "TIMER", &gui_cb_setting_model_timer);
     y += 13 + 1;
     // RF protocol
-    gui_add_button_smallfont(3, y, 40, 13, "RF PROTOCOL", &gui_cb_setting_model_proto);
+    gui_add_button_smallfont(3, y, 40, 13, "PROTOCOL", &gui_cb_setting_model_proto);
 
     // render buttons and set callback
     gui_add_button_smallfont(89, 34 + 0*15, 35, 13, "SAVE", &gui_cb_config_save);
@@ -1157,7 +1157,7 @@ static void gui_config_model_render(void) {
                 gui_render_option_window("TIMER", &gui_cb_render_option_timer);
                 break;
             case (GUI_SUBPAGE_SETTING_MODEL_PROTO) :
-                gui_render_option_window("RF PROTOCOL", &gui_cb_render_option_proto);
+                gui_render_option_window("PROTOCOL", &gui_cb_render_option_proto);
                 break;
         }
     }

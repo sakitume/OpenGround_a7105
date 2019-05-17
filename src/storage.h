@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 
-#include "frsky.h"
+#include "flysky.h"
 
 #define STORAGE_VERSION_ID 0x04
 #define STORAGE_MODEL_NAME_LEN 11

@@ -20,7 +20,7 @@
 #include "main.h"
 #include <string.h>
 #include <stdio.h>
-#include "frsky.h"
+#include "flysky.h"
 #include "debug.h"
 #include "timeout.h"
 #include "led.h"
@@ -81,9 +81,9 @@ static volatile uint8_t frsky_packet_received;
 static volatile uint8_t frsky_packet_sent;
 
 
-void frsky_init(void) {
+void flysky_init(void) {
     // uint8_t i;
-    debug("frsky: init\n"); debug_flush();
+    debug("flysky: init\n"); debug_flush();
 
     telemetry_init();
 
@@ -350,10 +350,6 @@ void frsky_send_bindpacket(uint8_t bind_packet_id) {
     //cc2500_transmit_packet(frsky_packet_buffer, frsky_packet_buffer[0] + 1);
 }
 
-
-uint8_t frsky_check_transceiver(void) {
-    debug("frsky: partinfo\n"); debug_flush();
-}
 
 void frsky_configure(void) {
     debug("frsky: configure\n"); debug_flush();
