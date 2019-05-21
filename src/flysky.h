@@ -25,100 +25,97 @@
 #include "main.h"
 #include "a7105.h"
 
-#define FRSKY_HOPTABLE_SIZE 47
-#define FRSKY_PACKET_LENGTH 17
-#define FRSKY_PACKET_BUFFER_SIZE (FRSKY_PACKET_LENGTH+3)
-#define FRSKY_COUNT_RXSTATS 20
+#define BIND_COUNT 2500
+
+#define PACKET_PERIOD_FLYSKY 1510UL
+#define PACKET_PERIOD_CX20 3984UL
+
+static const char * const flysky_opts[] = {
+  "WLToys ext.",  _tr_noop("Off"), "V9x9", "V6x6", "V912", "CX20", NULL,
+  "Freq Tune", "-300", "300", "655361", NULL, // big step 10, little step 1
+  NULL
+};
+enum {
+    PROTOOPTS_WLTOYS = 0,
+    PROTOOPTS_FREQTUNE,
+    LAST_PROTO_OPT,
+};
+ctassert(LAST_PROTO_OPT <= NUM_PROTO_OPTS, too_many_protocol_opts);
+
+#define WLTOYS_EXT_OFF 0
+#define WLTOYS_EXT_V9X9 1
+#define WLTOYS_EXT_V6X6 2
+#define WLTOYS_EXT_V912 3
+#define WLTOYS_EXT_CX20 4
+
+FLASHBYTETABLE A7105_regs[] = {
+    0xFF, 0x42, 0x00, 0x14, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x01, 0x21, 0x05, 0x00, 0x50,
+    0x9e, 0x4b, 0x00, 0x02, 0x16, 0x2b, 0x12, 0x00, 0x62, 0x80, 0x80, 0x00, 0x0a, 0x32, 0xc3, 0x0f,
+    0x13, 0xc3, 0x00, 0xFF, 0x00, 0x00, 0x3b, 0x00, 0x17, 0x47, 0x80, 0x03, 0x01, 0x45, 0x18, 0x00,
+    0x01, 0x0f, 0xFF,
+};
+FLASHBYTETABLE tx_channels[8][4] = {
+    { 0x12, 0x34, 0x56, 0x78},
+    { 0x18, 0x27, 0x36, 0x45},
+    { 0x41, 0x82, 0x36, 0x57},
+    { 0x84, 0x13, 0x65, 0x72},
+    { 0x87, 0x64, 0x15, 0x32},
+    { 0x76, 0x84, 0x13, 0x52},
+    { 0x71, 0x62, 0x84, 0x35},
+    { 0x71, 0x86, 0x43, 0x52}
+};
+
+// For code readability
+enum {
+    CHANNEL1 = 0,
+    CHANNEL2,
+    CHANNEL3,
+    CHANNEL4,
+    CHANNEL5,
+    CHANNEL6,
+    CHANNEL7,
+    CHANNEL8,
+    CHANNEL9,
+    CHANNEL10,
+    CHANNEL11,
+    CHANNEL12,
+};
+
+enum {
+    // flags going to byte 10
+    FLAG_V9X9_VIDEO = 0x40,
+    FLAG_V9X9_CAMERA= 0x80,
+    // flags going to byte 12
+    FLAG_V9X9_UNK   = 0x10, // undocumented ?
+    FLAG_V9X9_LED   = 0x20,
+};
+
+enum {
+    // flags going to byte 13
+    FLAG_V6X6_HLESS1= 0x80,
+    // flags going to byte 14
+    FLAG_V6X6_VIDEO = 0x01,
+    FLAG_V6X6_YCAL  = 0x02,
+    FLAG_V6X6_XCAL  = 0x04,
+    FLAG_V6X6_RTH   = 0x08,
+    FLAG_V6X6_CAMERA= 0x10,
+    FLAG_V6X6_HLESS2= 0x20,
+    FLAG_V6X6_LED   = 0x40,
+    FLAG_V6X6_FLIP  = 0x80,
+};
+
+enum {
+    // flags going to byte 14
+    FLAG_V912_TOPBTN= 0x40,
+    FLAG_V912_BTMBTN= 0x80,
+};
 
 void flysky_init(void);
-void frsky_configure(void);
-uint8_t frsky_bind_jumper_set(void);
-void frsky_enter_bindmode(void);
-void frsky_configure_address(void);
-void frsky_autotune(void);
-void frsky_enter_rxmode(uint8_t channel);
-void frsky_tune_channel(uint8_t ch);
-void frsky_handle_overflows(void);
-void frsky_fetch_txid_and_hoptable(void);
-void frsky_calib_pll(void);
-// void frsky_main(void);
-void frsky_handle_telemetry(void);
+void flysky_init_timer(void);
+void flysky_tx_set_enabled(uint32_t enabled);
+void TIM3_IRQHandler(void);
+void flysky_apply_extension_flags(void);
+void flysky_build_packet(uint8_t init);
 
-uint8_t frsky_extract_rssi(uint8_t rssi_raw);
-void frsky_increment_channel(int8_t cnt);
-void frsky_tx_set_enabled(uint32_t enabled);
-void frsky_set_channel(uint8_t hop_index);
-void frsky_send_telemetry(uint8_t telemetry_id);
-void frsky_send_bindpacket(uint8_t bind_packet_id);
-
-
-void frsky_do_clone_prepare(void);
-void frsky_do_clone_finish(void);
-void frsky_autotune_prepare(void);
-uint32_t frsky_autotune_do(void);
-void frsky_autotune_finish(void);
-void frsky_fetch_txid_and_hoptable_prepare(void);
-uint32_t frsky_fetch_txid_and_hoptable_do(void);
-void frsky_fetch_txid_and_hoptable_finish(void);
-
-void frsky_init_timer(void);
-
-void frsky_get_rssi(uint8_t *rssi, uint8_t *rssi_telemetry);
-
-// extern uint8_t frsky_current_ch_idx;
-// extern uint8_t frsky_diversity_count;
-// rssi
-// extern uint8_t frsky_rssi;
-// extern uint8_t frsky_link_quality;
-// pll calibration
-// extern uint8_t frsky_calib_fscal1_table[FRSKY_HOPTABLE_SIZE];
-// extern uint8_t frsky_calib_fscal2;
-// extern uint8_t frsky_calib_fscal3;
-//
-// extern volatile uint8_t frsky_packet_buffer[FRSKY_PACKET_BUFFER_SIZE];
-// extern volatile uint8_t frsky_packet_received;
-// extern volatile uint8_t frsky_packet_sent;
-
-
-
-/*
-void frsky_fetch_txid_and_hoptable(void);
-void frsky_configure_address(void);
-void frsky_calib_pll(void);
-void frsky_rf_interrupt(void) __interrupt RF_VECTOR;
-void frsky_handle_overflows(void);
-void frsky_setup_rf_dma(uint8_t);
-uint8_t frsky_extract_rssi(uint8_t rssi_raw);
-void frsky_enter_rxmode(uint8_t ch);
-void frsky_frame_sniffer(void);
-uint8_t frsky_append_hub_data(uint8_t sensor_id, uint16_t value, uint8_t *buf);
-
-// binding
-uint8_t frsky_bind_jumper_set(void);
-void frsky_do_bind(void);
-void frsky_store_config(void);
-*/
-
-
-// packet data example:
-// BIND:   [11 03 01 16 68 14 7E BF 15 56 97 00 00 00 00 00 00 0B F8 AF ]
-// NORMAL: [11 16 68 ... ]
-// TX:                 11 16 68 7A 1B 0B CA CB CF C4 88 85 CB CB CB 92 8B 78 21 AF
-// TELEMETRY WITH HUB: 11 16 68 60 64 5B 00 00 5E 3B 09 00 5E 5E 3B 09 00 5E 48 B1
-#define FRSKY_VALID_FRAMELENGTH(_b) (_b[0] == 0x11)
-#define FRSKY_VALID_CRC(_b)     (_b[19] & 0x80)
-#define FRSKY_VALID_TXID(_b) ((_b[1] == storage.frsky_txid[0]) && (_b[2] == storage.frsky_txid[1]))
-#define FRSKY_VALID_PACKET_BIND(_b) \
-                      (FRSKY_VALID_FRAMELENGTH(_b) && FRSKY_VALID_CRC(_b) && (_b[2] == 0x01))
-#define FRSKY_VALID_PACKET(_b) \
-                      (FRSKY_VALID_FRAMELENGTH(_b) && FRSKY_VALID_CRC(_b) && FRSKY_VALID_TXID(_b) )
-
-/*
-#define FRSKY_HUB_TELEMETRY_HEADER 0x5E
-#define FRSKY_HUB_TELEMETRY_VOLTAGE 0x39 //not really documented, seems to be volt in 0.1V steps...
-#define FRSKY_HUB_TELEMETRY_VOLTAGE_BEFORE 0x3A
-#define FRSKY_HUB_TELEMETRY_VOLTAGE_AFTER  0x3B
-#define FRSKY_HUB_TELEMETRY_CURRENT        0x28
-*/
 
 #endif  // FLYSKY_H_

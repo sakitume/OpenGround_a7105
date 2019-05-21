@@ -58,19 +58,7 @@ void storage_init(void) {
     // storage_load_defaults();
     // storage_save();
 
-    debug("storage: loaded hoptable[]:\n");
-    for (i = 0; i < 9; i++) {
-            debug_put_hex8(storage.frsky_hop_table[i]);
-            debug_putc(' ');
-    }
-
-    debug("...\n");
-    debug("storage: txid 0x");
-    debug_put_hex8(storage.frsky_txid[0]);
-    debug_put_hex8(storage.frsky_txid[1]);
-    debug_flush();
-
-    debug("\nstorage: stick calib:\n");
+    debug("storage: stick calib:\n");
     for (i = 0; i < 4; i++) {
         debug("CH "); debug_put_uint8(i); debug_putc(' ');
         debug_put_uint16(storage.stick_calibration[i][0]); debug_putc('-');
